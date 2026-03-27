@@ -7,7 +7,7 @@ const mockBooks = [
     author: 'Fyodor Dostoevsky',
     year: '1869',
     rating: 4,
-    coverImg: 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&q=80&w=300&h=450',
+    coverImg: 'https://books.google.co.in/books/content?id=5fyuj9x9UZIC&pg=PP1&img=1&zoom=3&hl=en&bul=1&sig=ACfU3U0iwrhTENPXQNuf6ozlf0O7X0Vn3A&w=1280',
     tags: ['Classics', 'Fiction', 'Philosophy'],
     description: "A gothic masterpiece of tempestuous passions and dark secrets, following the Christ-like Prince Myshkin as he navigates the corruption of 19th-century Russian society.",
     reviews: [
@@ -18,11 +18,11 @@ const mockBooks = [
   },
   {
     id: '2',
-    title: 'JANE EYRE',
+    title: 'Jane Eyre',
     author: 'Charlotte Brontë',
     year: '1847',
     rating: 5,
-    coverImg: 'https://images.unsplash.com/photo-1543005814-14b24e1f72ee?auto=format&fit=crop&q=80&w=300&h=450',
+    coverImg: '',
     tags: ['Romance', 'Classic', 'Gothic'],
     description: "Orphaned as a child, Jane Eyre must overcome poverty and injustice to find fulfillment in this timeless tale of love and independence.",
     reviews: [
@@ -62,7 +62,7 @@ const BookContext = createContext();
 
 export function BookProvider({ children }) {
   const [books, setBooks] = useState(mockBooks);
-  
+
   return (
     <BookContext.Provider value={{ books, setBooks }}>
       {children}
