@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { BookProvider } from './context/BookContext';
 import Home from './pages/Home';
+import BookDetail from './pages/BookDetail';
 import Scanner from './pages/Scanner';
 import CustomEntry from './pages/CustomEntry';
 import ReviewForm from './pages/ReviewForm';
@@ -14,6 +15,7 @@ export default function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/book/:id" element={<BookDetail />} />
           <Route path="/scan" element={<Scanner />} />
           <Route path="/add-manual" element={<CustomEntry />} />
           <Route path="/review" element={<ReviewForm />} />

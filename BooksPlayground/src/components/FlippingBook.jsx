@@ -26,7 +26,7 @@ const useWindowWidth = () => {
   return width;
 };
 
-export const FlippingBook = ({ book, isExpanded, layoutId, onClick }) => {
+export const FlippingBook = ({ book, isExpanded, onClick }) => {
   const [currentPage, setCurrentPage] = useState(0);
   const bookRef = useRef(null);
   const windowWidth = useWindowWidth();
@@ -38,7 +38,7 @@ export const FlippingBook = ({ book, isExpanded, layoutId, onClick }) => {
         if (flipObj && flipObj.getPageCount() > 1) {
           flipObj.flip(1);
         }
-      }, 400);
+      }, 1200);
       return () => clearTimeout(timer);
     }
   }, [isExpanded]);
@@ -71,7 +71,6 @@ export const FlippingBook = ({ book, isExpanded, layoutId, onClick }) => {
 
   return (
     <motion.div
-      layoutId={layoutId}
       // Only allow onClick in list/grid view. In detail view, back button is the only exit.
       onClick={!isExpanded ? onClick : undefined}
       className={`relative z-50 flex items-center justify-center ${!isExpanded ? 'cursor-pointer hover:scale-105 transition-transform' : 'cursor-default'}`}
@@ -88,10 +87,10 @@ export const FlippingBook = ({ book, isExpanded, layoutId, onClick }) => {
           style={{ width: '176px', height: '256px' }}
         >
           <div className="w-[8px] h-full bg-black flex-shrink-0" />
-          <div className="flex-1 relative h-full">
+          <div className="flex-1 relative h-full bg-neutral-900 z-10 rounded-tr rounded-br-md">
             {book.coverImg ? (
               <img
-                className="w-full h-full object-cover rounded-tr rounded-br-md shadow-[2px_0px_6px_rgba(0,0,0,0.5)]"
+                className="w-full h-full object-cover rounded-tr rounded-br-md shadow-[2px_0px_6px_rgba(0,0,0,0.5)] relative z-10"
                 src={book.coverImg}
                 alt={book.title}
               />
@@ -138,7 +137,9 @@ export const FlippingBook = ({ book, isExpanded, layoutId, onClick }) => {
               <div className="w-64 h-96 pr-2 bg-gradient-to-l from-white to-black shadow-[0px_18px_30px_0px_rgba(0,0,0,0.35)] shadow-[inset_-12px_-6px_18px_0px_rgba(255,255,255,0.21)] inline-flex justify-between items-center overflow-hidden">
                 <div className="w-3 self-stretch bg-black" />
                 {book.coverImg ? (
-                  <img className="flex-1 self-stretch rounded-tr rounded-br-md shadow-[3px_0px_9px_0px_rgba(0,0,0,0.50)] object-cover" src={book.coverImg} alt={book.title} />
+                  <div className="flex-1 self-stretch bg-neutral-900 z-10 rounded-tr rounded-br-md shadow-[3px_0px_9px_0px_rgba(0,0,0,0.50)] overflow-hidden">
+                    <img className="w-full h-full object-cover relative z-10" src={book.coverImg} alt={book.title} />
+                  </div>
                 ) : (
                   <div className="flex-1 self-stretch rounded-tr rounded-br-md bg-gradient-to-br from-neutral-950 to-neutral-800 flex flex-col justify-center items-center p-8 shadow-[2px_0px_6px_0px_rgba(0,0,0,0.80)] relative overflow-hidden">
                     {/* Procedural texture overlay */}
