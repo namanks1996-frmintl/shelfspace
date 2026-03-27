@@ -1,0 +1,15 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+.vite/
+
+# Environment & Secrets — NEVER commit these
+.env
+.env.*
+!.env.example
+.env.keys
+
+# OS
+.DS_Store
