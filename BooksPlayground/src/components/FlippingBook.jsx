@@ -1,6 +1,8 @@
 import React, { forwardRef, useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import HTMLFlipBook from 'react-pageflip';
+import quoteLeft from '../Icons/quote-left.svg';
+import quoteRight from '../Icons/quote-right.svg';
 
 const Page = forwardRef((props, ref) => {
   return (
@@ -43,6 +45,8 @@ export const FlippingBook = ({ book, isExpanded, onClick }) => {
     }
   }, [isExpanded]);
 
+  const totalPages = 2 + (book.reviews?.length > 0 ? book.reviews.length * 2 : 2);
+
   const getTransform = () => {
     if (!isExpanded) return 'none';
 
@@ -52,14 +56,14 @@ export const FlippingBook = ({ book, isExpanded, onClick }) => {
       return 'translateX(-128px)';
     }
 
-    // 2. When the book is completely closed on the BACK cover (page 5):
+    // 2. When the book is completely closed on the BACK cover:
     // The back cover is drawn on the left side of the spread.
     // Shift right by half a page (+128px) to perfectly center it in the viewport.
-    if (currentPage >= 5) {
+    if (currentPage >= totalPages - 1) {
       return 'translateX(128px)';
     }
 
-    // 3. When the book is open (pages 1-4):
+    // 3. When the book is open:
     if (windowWidth < 560) {
       // Mobile: Keep the shift so the Right Page is exactly centered in the viewport.
       return 'translateX(-128px)';
@@ -146,61 +150,69 @@ export const FlippingBook = ({ book, isExpanded, onClick }) => {
                     <div className="absolute inset-0 opacity-10 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPgo8cmVjdCB3aWR0aD0iNCIgaGVpZ2h0PSI0IiBmaWxsPSIjZmZmIiBmaWxsLW9wYWNpdHk9IjAuMDUiLz4KPC9zdmc+')] mix-blend-overlay" />
                     <h2 className="text-white/90 text-xl font-bold font-montagu uppercase tracking-widest leading-snug line-clamp-5 text-center relative z-10">{book.title}</h2>
                     <p className="text-white/40 text-xs font-medium font-poppins uppercase tracking-[0.2em] relative z-10 text-center">{book.author}</p>
-
-                    <div className="absolute bottom-6 w-8 h-8 rounded-full border border-white/10 flex items-center justify-center opacity-50">
-                      <span className="text-white font-montagu text-[10px]">BN</span>
-                    </div>
                   </div>
                 )}
               </div>
             </Page>
 
-            {/* PAGE 1: INSIDE LEFT (INFO) */}
-            <Page className="rounded-l-md">
-              <div className="w-64 h-96 bg-[radial-gradient(ellipse_164.24%_170.92%_at_0.00%_0.00%,_#F2EEDF_36%,_#AFAA96_100%)] shadow-[inset_2.9680850505828857px_0px_4.452127456665039px_0px_rgba(0,0,0,0.35)] shadow-[inset_5.9361701011657715px_-5.9361701011657715px_17.808509826660156px_0px_rgba(255,255,255,0.12)] flex justify-between items-center overflow-hidden">
-                <div className="flex-1 p-6 flex flex-col justify-center items-center gap-1">
-                  <h2 className="text-black text-2xl font-bold font-montagu text-center uppercase tracking-tight leading-tight">{book.title}</h2>
-                  <p className="text-black/40 text-base font-bold font-poppins text-center">{book.author}</p>
+            {/* DYNAMIC REVIEW SPREADS */}
+            {book.reviews?.length > 0 ? book.reviews.flatMap((review, index) => [
+              /* LEFT PAGE: BRANDING/INFO OR BLANK MOTIF */
+              <Page key={`left-${index}`} className="rounded-l-md">
+                <div className="w-64 h-96  bg-gradient-to-br from-white from 45% to-zinc-400 shadow-[inset_2.9680850505828857px_0px_4.452127456665039px_0px_rgba(0,0,0,0.35)] shadow-[inset_5.9361701011657715px_-5.9361701011657715px_17.808509826660156px_0px_rgba(255,255,255,0.12)] flex justify-between items-center overflow-hidden">
+                  {index === 0 ? (
+                    <div className="flex-1 p-6 flex flex-col justify-center items-center gap-1">
+                      <h2 className="text-black text-xl font-bold font-montagu text-center uppercase tracking-tight leading-tight line-clamp-3">{book.title}</h2>
+                      <p className="text-black/40 text-[14px] font-bold font-poppins text-center">{book.author}</p>
+                    </div>
+                  ) : (
+                    <div className="flex-1 flex flex-col justify-center items-center opacity-10">
+                      <span className="font-montagu text-xl text-black">ShelfSpace</span>
+                    </div>
+                  )}
+                  <div className="w-2 self-stretch bg-gradient-to-b from-neutral-800 to-black" />
                 </div>
-                <div className="w-2 self-stretch bg-gradient-to-b from-neutral-800 to-black" />
-              </div>
-            </Page>
+              </Page>,
 
-            {/* PAGE 2: INSIDE RIGHT (CONTENT 1) */}
-            <Page className="rounded-r-md">
-              <div className="w-64 h-96 pr-1.5 bg-[radial-gradient(ellipse_141.46%_195.26%_at_100.00%_-0.00%,_white_57%,_#C1C1C1_100%)] shadow-[inset_-2.9680850505828857px_0px_4.452127456665039px_0px_rgba(0,0,0,0.35)] shadow-[inset_-11.872340202331543px_-5.9361701011657715px_17.808509826660156px_0px_rgba(255,255,255,0.20)] flex justify-between items-center overflow-hidden">
-                <div className="w-2 self-stretch bg-gradient-to-b from-neutral-800 to-black" />
-                <div className="flex-1 px-6 pt-8 pb-4 flex flex-col items-center gap-3">
-                  <h3 className="text-black text-base font-semibold font-poppins leading-tight">{book.reviews[0]?.title || 'Review'}</h3>
-                  <div className="flex-1 flex flex-col justify-start items-center gap-1">
-                    <span className="text-black/10 text-4xl font-bold font-montagu">“</span>
-                    <p className="text-black text-[10px] font-bold font-poppins leading-relaxed text-center">{book.reviews[0]?.text}</p>
-                    <span className="text-black/10 text-4xl font-bold font-montagu rotate-180">“</span>
+              /* RIGHT PAGE: THE ACTUAL REVIEW CONTENT */
+              <Page key={`right-${index}`} className="rounded-r-md">
+                <div className="w-64 h-96 pr-1.5 bg-[radial-gradient(ellipse_141.46%_195.26%_at_100.00%_-0.00%,_white_57%,_#C1C1C1_100%)] shadow-[inset_-2.9680850505828857px_0px_4.452127456665039px_0px_rgba(0,0,0,0.35)] shadow-[inset_-11.872340202331543px_-5.9361701011657715px_17.808509826660156px_0px_rgba(255,255,255,0.20)] flex justify-between items-center overflow-hidden">
+                  <div className="w-2 self-stretch bg-gradient-to-b from-neutral-800 to-black" />
+                  <div className="self-stretch flex-1 px-5 pt-10 pb-6 flex flex-col items-center gap-4">
+                    <h3 className="self-stretch text-black text-[14px] font-semibold font-poppins leading-tight">{review.title}</h3>
+                    <div className="self-stretch flex-1 flex flex-col justify-start items-center">
+                      <img src={quoteLeft} className="w-5 h-5 opacity-10 self-start mb-1" alt="quote-left" />
+                      <p className="self-stretch text-black text-[10px] font-medium font-poppins leading-relaxed">{review.text}</p>
+                      <img src={quoteRight} className="w-5 h-5 opacity-10 self-end mt-1" alt="quote-right" />
+                    </div>
+                    <div className="self-stretch text-right text-black/30 text-[9px] font-poppins w-full tracking-widest italic">
+                      {index === book.reviews.length - 1 ? 'End' : 'Next →'}
+                    </div>
                   </div>
-                  <div className="text-right text-black/40 text-[10px] font-bold font-poppins w-full">Next →</div>
                 </div>
-              </div>
-            </Page>
-
-            {/* PAGE 3: INSIDE LEFT (BLANK per request) */}
-            <Page className="rounded-l-md">
-              <div className="w-64 h-96 bg-[radial-gradient(ellipse_164.24%_170.92%_at_0.00%_0.00%,_#F2EEDF_36%,_#AFAA96_100%)] shadow-[inset_2.9680850505828857px_0px_4.452127456665039px_0px_rgba(0,0,0,0.35)] flex justify-end">
-                <div className="w-2 self-stretch bg-gradient-to-b from-neutral-800 to-black" />
-              </div>
-            </Page>
-
-            {/* PAGE 4: INSIDE RIGHT (CONTENT 2 or placeholder) */}
-            <Page className="rounded-r-md">
-              <div className="w-64 h-96 bg-white shadow-[inset_-2.9680850505828857px_0px_4.452127456665039px_0px_rgba(0,0,0,0.35)] flex items-stretch">
-                <div className="w-2 self-stretch bg-gradient-to-b from-neutral-800 to-black" />
-                <div className="flex-1 flex items-center justify-center">
-                  <p className="text-black/10 font-montagu text-lg uppercase tracking-widest text-center">Final Chapter</p>
+              </Page>
+            ]) : [
+              /* NO-REVIEWS FALLBACK SPREAD */
+              <Page key="empty-left" className="rounded-l-md">
+                <div className="w-64 h-96 bg-[radial-gradient(ellipse_164.24%_170.92%_at_0.00%_0.00%,_#F2EEDF_36%,_#AFAA96_100%)] shadow-[inset_2.9680850505828857px_0px_4.452127456665039px_0px_rgba(0,0,0,0.35)] flex justify-end">
+                  <div className="flex-1 flex flex-col justify-center items-center opacity-10">
+                    <span className="font-montagu text-4xl text-black">ShelfSpace</span>
+                  </div>
+                  <div className="w-2 self-stretch bg-gradient-to-b from-neutral-800 to-black" />
                 </div>
-              </div>
-            </Page>
+              </Page>,
+              <Page key="empty-right" className="rounded-r-md">
+                <div className="w-64 h-96 pr-1.5 bg-[radial-gradient(ellipse_141.46%_195.26%_at_100.00%_-0.00%,_white_57%,_#C1C1C1_100%)] shadow-[inset_-2.9680850505828857px_0px_4.452127456665039px_0px_rgba(0,0,0,0.35)] shadow-[inset_-11.872340202331543px_-5.9361701011657715px_17.808509826660156px_0px_rgba(255,255,255,0.20)] flex justify-start items-center overflow-hidden">
+                  <div className="w-2 self-stretch bg-gradient-to-b from-neutral-800 to-black" />
+                  <div className="flex-1 flex justify-center items-center px-4">
+                    <p className="text-black/30 font-poppins text-[10px] text-center italic">No reviews yet for this masterpiece.</p>
+                  </div>
+                </div>
+              </Page>
+            ]}
 
-            {/* PAGE 5: BACK COVER */}
-            <Page className="rounded-l-md">
+            {/* FINAL PAGE: BACK COVER */}
+            <Page className="rounded-md">
               <div className="w-64 h-96 bg-black flex items-center justify-center shadow-[0px_18px_30px_0px_rgba(0,0,0,0.35)]">
                 <div className="text-white/20 font-montagu text-sm uppercase tracking-widest">THE END</div>
               </div>

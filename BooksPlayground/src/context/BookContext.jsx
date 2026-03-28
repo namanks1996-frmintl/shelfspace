@@ -11,7 +11,7 @@ const mockBooks = [
     tags: ['Classics', 'Fiction', 'Philosophy'],
     description: "A gothic masterpiece of tempestuous passions and dark secrets, following the Christ-like Prince Myshkin as he navigates the corruption of 19th-century Russian society.",
     reviews: [
-      { title: 'Killer drama', text: "I’ve been trying to review this book for over a week now. It's a profound exploration of human soul and tragedy." },
+      { title: 'Killer drama', text: "I’ve been trying to review this book for over a week now, but I can’t. I’m struggling with something: How do I review a Russian literature classic? Better yet, how do I review a Russian literature classic without sounding like a total dumbass? (Hint: It’s probably not going to happen.)" },
       { title: 'The Soul of Russia', text: "Dostoevsky's insight into the psychology of his characters is unparalleled. This book leaves a mark." },
       { title: 'Brilliant!', text: "A challenging but rewarding read. Prince Myshkin is one of literature's most memorable characters." }
     ]
